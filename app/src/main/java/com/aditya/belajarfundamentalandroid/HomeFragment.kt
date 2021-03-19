@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.fragment.app.FragmentManager
 
 
 class HomeFragment : Fragment(), View.OnClickListener {
@@ -25,6 +26,14 @@ class HomeFragment : Fragment(), View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
-        TODO("Not yet implemented")
+        if (v?.id == R.id.btn_to_category) {
+            val mCategoryFragment = CategoryFragment()
+            val mFragmentManager = fragmentManager
+            mFragmentManager?.beginTransaction()?.apply {
+                replace(R.id.frame_container, mCategoryFragment, CategoryFragment::class.java.simpleName)
+                addToBackStack(null)
+                commit()
+            }
+        }
     }
 }
