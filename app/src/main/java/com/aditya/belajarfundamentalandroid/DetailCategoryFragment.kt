@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 
 
 class DetailCategoryFragment : Fragment(), View.OnClickListener {
@@ -52,9 +53,21 @@ class DetailCategoryFragment : Fragment(), View.OnClickListener {
         tvCategoryDescription = view.findViewById(R.id.tv_category_description)
         btnToProfile = view.findViewById(R.id.btn_profile)
         btnShowDialog = view.findViewById(R.id.btn_show_dialog)
+
+        btnShowDialog.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
-        TODO("Not yet implemented")
+        if (v?.id == R.id.btn_show_dialog) {
+            val mOptionDialogFragment = OptionDialogFragment()
+            val mFragmentManager = childFragmentManager
+            mOptionDialogFragment.show(mFragmentManager, OptionDialogFragment::class.java.simpleName)
+        }
+    }
+
+    internal var optionDialogListener: OptionDialogFragment.OnOptionDialogListener = object : OptionDialogFragment.OnOptionDialogListener {
+        override fun onOptionChosen(text: String?) {
+            Toast.makeText(activity, text, Toast.LENGTH_SHORT).show()
+        }
     }
 }

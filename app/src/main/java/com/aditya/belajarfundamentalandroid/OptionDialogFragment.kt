@@ -1,5 +1,6 @@
 package com.aditya.belajarfundamentalandroid
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,8 +9,9 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.RadioButton
 import android.widget.RadioGroup
+import androidx.fragment.app.DialogFragment
 
-class OptionDialogFragment : Fragment() {
+class OptionDialogFragment : DialogFragment() {
 
     private lateinit var btnChoose: Button
     private lateinit var btnClose: Button
@@ -40,8 +42,37 @@ class OptionDialogFragment : Fragment() {
         rbMoyes = view.findViewById(R.id.rb_moyes)
 
         btnChoose.setOnClickListener {
-
+            val checkedRadioButtonId = rgOptions.checkedRadioButtonId
+            if (checkedRadioButtonId != -1) {
+                var coach: String? = null
+                when (checkedRadioButtonId) {
+                    R.id.rb_saf -> coach = rbSaf.text.toString().trim()
+                    R.id.rb_mou -> coach = rbMou.text.toString().trim()
+                    R.id.rb_lvg -> coach = rbLvg.text.toString().trim()
+                    R.id.rb_moyes -> coach = rbMoyes.text.toString().trim()
+                }
+                optionDialogListener?.onOptionChosen(coach)
+                dialog?.dismiss()
+            }
         }
+        btnClose.setOnClickListener {
+            dialog?.cancel()
+        }
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        val fragment = parentFragment
+
+        if (fragment is DetailCategoryFragment) {
+            val detailCategoryFragment = fragment
+            this.optionDialogListener = detailCategoryFragment.optionDialogListener
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        this.optionDialogListener = null
     }
 
     interface OnOptionDialogListener {
